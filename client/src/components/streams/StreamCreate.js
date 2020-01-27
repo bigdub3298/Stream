@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Field, reduxForm, clearSubmitErrors } from "redux-form";
+import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
+import { createStream } from "../../actions";
 
 export class StreamCreate extends Component {
   renderError(error, touched) {
@@ -31,9 +33,9 @@ export class StreamCreate extends Component {
     );
   };
 
-  onSubmit(values) {
-    console.log(values);
-  }
+  onSubmit = values => {
+    this.props.createStream({ ...values, userId: this.props.userId });
+  };
 
   render() {
     return (
@@ -73,7 +75,15 @@ const validate = values => {
   return errors;
 };
 
-export default reduxForm({
+const formWrapped = reduxForm({
   form: "streamCreate",
   validate
 })(StreamCreate);
+
+const mapStateToProps = state => {
+  return { userId: state.auth.userId };
+};
+
+export default connect(mapStateToProps, {
+  createStream
+})(formWrapped);
