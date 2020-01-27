@@ -36,6 +36,17 @@ class StreamList extends Component {
     });
   }
 
+  renderCreateLink() {
+    if (this.props.isSignedIn) {
+      return (
+        <div style={{ textAlign: "right" }}>
+          <Link to="/stream/new" className="ui button primary">
+            Create Stream
+          </Link>
+        </div>
+      );
+    }
+  }
   componentDidMount() {
     this.props.fetchAllStreams();
   }
@@ -45,6 +56,7 @@ class StreamList extends Component {
       <div>
         <h1>Streams</h1>
         <div className="ui celled list">{this.renderStreamList()}</div>
+        {this.renderCreateLink()}
       </div>
     );
   }
@@ -53,7 +65,8 @@ class StreamList extends Component {
 const mapStateToProps = state => {
   return {
     streams: Object.values(state.streams),
-    currentUserId: state.auth.userId
+    currentUserId: state.auth.userId,
+    isSignedIn: state.auth.isSignedIn
   };
 };
 
