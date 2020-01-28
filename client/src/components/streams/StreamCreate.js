@@ -34,7 +34,10 @@ export class StreamCreate extends Component {
   };
 
   onSubmit = values => {
-    this.props.createStream({ ...values, userId: this.props.userId });
+    this.props.createStream({
+      ...values,
+      userId: this.props.userId ? this.props.userId : -1
+    });
   };
 
   render() {
