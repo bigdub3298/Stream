@@ -14,6 +14,7 @@ export const signOut = () => {
 
 export const createStream = values => async dispatch => {
   const response = await streams.post("/streams", values);
+
   dispatch({ type: "CREATE_STREAM", payload: response.data });
   history.push("/");
 };
@@ -31,9 +32,10 @@ export const fetchStream = id => async dispatch => {
 };
 
 export const editStream = (id, values) => async dispatch => {
-  const response = await streams.put(`/streams/${id}`, values);
+  const response = await streams.patch(`/streams/${id}`, values);
 
   dispatch({ type: "EDIT_STREAM", payload: response.data });
+  history.push("/");
 };
 
 export const deleteStream = id => async dispatch => {
