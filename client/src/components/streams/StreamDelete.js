@@ -1,11 +1,10 @@
 import React from "react";
 import Modal from "../Modal";
 
-export default function StreamDelete() {
+export default function StreamDelete(props) {
   return (
     <div>
-      StreamDelete
-      <Modal />
+      <Modal id={props.match.params.id} />
     </div>
   );
 }
