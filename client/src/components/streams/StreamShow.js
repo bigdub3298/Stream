@@ -1,11 +1,39 @@
 import React, { Component } from "react";
+import flv from "flv.js";
 import { connect } from "react-redux";
 import { fetchStream } from "../../actions";
 
 class StreamShow extends Component {
+  videoRef = React.createRef();
+  flvPlayer = null;
+
+  setUpVideoPlayer() {
+    const { id } = this.props.match.params;
+
+    if (this.flvPlayer || this.props.stream) {
+      if (flv.isSupported()) {
+        this.flvPlayer = flv.createPlayer({
+          type: "flv",
+          url: `http://localhost:8000/live/${id}.flv`
+        });
+      }
+      this.flvPlayer.attachMediaElement(this.videoRef.current);
+      this.flvPlayer.load();
+    }
+  }
+
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.fetchStream(id);
+    this.setUpVideoPlayer();
+  }
+
+  componentDidUpdate() {
+    this.setUpVideoPlayer();
+  }
+
+  componentWillUnmount() {
+    this.flvPlayer.destroy();
   }
 
   render() {
@@ -16,10 +44,13 @@ class StreamShow extends Component {
         </div>
       );
     }
+
+    const { title, description } = this.props.stream;
     return (
       <div>
-        <h1>{this.props.stream.title}</h1>
-        <p>{this.props.stream.description}</p>
+        <video ref={this.videoRef} style={{ width: "100%" }} controls />
+        <h1>{title}</h1>
+        <p>{description}</p>
       </div>
     );
   }
